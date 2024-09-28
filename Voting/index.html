@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Monitor Vote</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Class Monitor Vote</h1>
+    <p>Total Votes: <span id="totalVotes">0</span></p> <!-- Display total votes -->
+    <form id="submitForm">
+        <label for="name">Student Name</label>
+        <input placeholder="Enter Name" type="text" id="name" name="name" required>
+        <label for="select">Choose Monitor</label>
+        <select id="select">
+            <option value="ish">Ishmael</option>
+            <option value="rah">Rahim</option>
+            <option value="hri">Hrithik</option>
+        </select>
+        <button type="submit">Vote</button>
+    </form>
+
+    <div class="IsCon" style="margin: 0 15px;">
+        <p>Ishmael</p>
+        <p class="ishmae" style="font-size: smaller;">Total: <span class="ishmaelCount">0</span></p>
+        <div class="ishmaelVotes"></div> <!-- Where Ishmael's votes will be displayed -->
+    </div>
+
+    <div class="RaCon" style="margin: 0 15px;">
+        <p>Rahim</p>
+        <p class="rahim" style="font-size: smaller;">Total: <span class="rahimCount">0</span></p>
+        <div class="rahimVotes"></div> <!-- Where Rahim's votes will be displayed -->
+    </div>
+
+    <div class="HrCon" style="margin: 0 15px;">
+        <p>Hrithik</p>
+        <p class="hrithik" style="font-size: smaller;">Total: <span class="hrithikCount">0</span></p>
+        <div class="hrithikVotes"></div> <!-- Where Hrithik's votes will be displayed -->
+    </div>
+
+   <script src="script.js"></script>
+</body>
+</html>
