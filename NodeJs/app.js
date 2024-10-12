@@ -1,9 +1,8 @@
 const http = require('http');
 const fs = require('fs');
-const url = require('url');
 const querystring = require('querystring');
 
-const server = http.createServer((req, res) => {
+cost server = http.createServer((req, res) => {
   if (req.method === 'GET') {
     // Serve the HTML form
     res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -31,17 +30,26 @@ const server = http.createServer((req, res) => {
       const parsedData = querystring.parse(body);
       const message = parsedData.message || 'No message provided';
 
-      // Respond with the HTML page containing the message
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.write(`
-        <html>
-          <body>
-            <h2> ${message}</h2>
-            <a href="/">Send another message</a>
-          </body>
-        </html>
-      `);
-      res.end();
+      // Append the message to hello.txt
+      fs.appendFile('hello.txt', message + '\n', (err) => {
+        if (err) {
+          res.writeHead(500, { 'Content-Type': 'text/html' });
+          res.write('<h2>Failed to write message to file</h2>');
+          return res.end();
+        }
+
+        // Respond with the HTML page containing the message
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.write(`
+          <html>
+            <body>
+              <h2>Your message: ${message}</h2>
+              <a href="/">Send another message</a>
+            </body>
+          </html>
+        `);
+        res.end();
+      });
     });
   }
 });
