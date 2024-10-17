@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const querystring = require('querystring');
 
-cost server = http.createServer((req, res) => {
+const server = http.createServer((req, res) => {
   if (req.method === 'GET') {
     // Serve the HTML form
     res.writeHead(200, { 'Content-Type': 'text/html' });
