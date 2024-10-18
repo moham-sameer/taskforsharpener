@@ -6,35 +6,40 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = 3000;
 
-// Middleware
+// Set the view engine to EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Middleware to parse incoming requests
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Serve static files (CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Helper function to safely read the JSON file
 function readMessagesFile() {
     const filePath = path.join(__dirname, 'messages.json');
     
-    // Check if the file exists and is not empty
     if (fs.existsSync(filePath)) {
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         try {
-            return JSON.parse(fileContent || '[]');  // If the file is empty, use an empty array
+            return JSON.parse(fileContent || '[]');
         } catch (error) {
             console.error('Error parsing JSON:', error);
-            return [];  // Return empty array if there's a parsing error
+            return [];
         }
     } else {
-        return [];  // Return empty array if file doesn't exist
+        return [];
     }
 }
 
-// Serve the login page
+// Handle GET requests to the login page
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+    res.render('login');
 });
 
-// Handle login
+// Handle login and redirect to the chat page
 app.post('/login', (req, res) => {
     const { username } = req.body;
     if (username) {
@@ -46,40 +51,48 @@ app.post('/login', (req, res) => {
 
 // Serve the chat page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    const username = req.query.username;
+    res.render('index', { username });
 });
 
-// Handle message submission and store messages in messages.json
+// Handle sending chat messages
 app.post('/send-message', (req, res) => {
     const { username, message } = req.body;
+    const filePath = path.join(__dirname, 'messages.json');
+    const messages = readMessagesFile();
 
-    if (username && message) {
-        const filePath = path.join(__dirname, 'messages.json');
-        const messages = readMessagesFile();  // Read the messages safely
+    messages.push({ username, message });
+    fs.writeFileSync(filePath, JSON.stringify(messages, null, 2));
 
-        messages.push({ username, message });
-        fs.writeFileSync(filePath, JSON.stringify(messages, null, 2));  // Write messages to file
-
-        res.json({ success: true });
-    } else {
-        res.status(400).json({ error: 'Username and message required' });
-    }
+    res.json({ success: true });
 });
 
 // API to get all messages
 app.get('/messages', (req, res) => {
-    const messages = readMessagesFile();  // Read messages safely
+    const messages = readMessagesFile();
     res.json(messages);
 });
 
-// Initialize message file if not exists
-const initMessagesFile = () => {
-    const filePath = path.join(__dirname, 'messages.json');
-    if (!fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, '[]');  // Initialize with an empty array
-    }
-};
-initMessagesFile();  // Ensure the file is initialized
+// Contact Us page route
+app.get('/contactus', (req, res) => {
+    res.render('contact');
+});
+
+// Handle Contact Us form submission
+app.post('/contactus', (req, res) => {
+    // You can handle storing the form data here if needed
+    res.redirect('/success');
+});
+
+// Success page route
+app.get('/success', (req, res) => {
+    res.render('success');
+});
+
+// Handle 404 - Page Not Found
+app.use((req, res, next) => {
+    res.status(404).render('404');
+});
 
 // Start the server
 app.listen(PORT, () => {

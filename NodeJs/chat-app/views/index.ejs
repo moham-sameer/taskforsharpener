@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Chat</title>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/contactus">Contact Us</a>
+    </nav>
+    <h2>Welcome, <%= username %>!</h2>
+    <form id="messageForm">
+        <textarea id="message" placeholder="Type your message"></textarea><br>
+        <button type="submit">Send</button>
+    </form>
+
+    <h3>Messages:</h3>
+    <div id="chatbox"></div>
+
+    <script src="/chat.js"></script>
+</body>
+</html>
