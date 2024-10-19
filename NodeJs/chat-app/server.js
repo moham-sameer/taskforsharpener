@@ -2,7 +2,8 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
-
+const successRoute = require('../routes/success')
+const contactRoute = require('../routes/contact')
 const app = express();
 const PORT = 3000;
 
@@ -74,9 +75,7 @@ app.get('/messages', (req, res) => {
 });
 
 // Contact Us page route
-app.get('/contactus', (req, res) => {
-    res.render('contact');
-});
+app.use('/contact',contactRoute);
 
 // Handle Contact Us form submission
 app.post('/contactus', (req, res) => {
@@ -85,9 +84,7 @@ app.post('/contactus', (req, res) => {
 });
 
 // Success page route
-app.get('/success', (req, res) => {
-    res.render('success');
-});
+  app.use('/success',successRoute)
 
 // Handle 404 - Page Not Found
 app.use((req, res, next) => {
